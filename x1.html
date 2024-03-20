@@ -302,15 +302,15 @@
     const urlParams = new URLSearchParams(queryString);
     const click_id = urlParams.get('click_id');
 
-   //var x = "https://redirect.appmetrica.yandex.com/serve/388987897694452140?price=[PRICE]&click_id="+click_id+"&pricing_model=[PRICING_MODEL]&domain=[DOMAIN]&campaign_id=[CAMPAIGN_ID]&in_page_ad_id=[IN_PAGE_AD_ID]&in_page_ad_creative_id=[IN_PAGE_AD_CREATIVE_ID]&deviceua=[DEVICEUA]";
+   var x = "https://redirect.appmetrica.yandex.com/serve/388987897694452140?price=[PRICE]&click_id="+click_id+"&pricing_model=[PRICING_MODEL]&domain=[DOMAIN]&campaign_id=[CAMPAIGN_ID]&in_page_ad_id=[IN_PAGE_AD_ID]&in_page_ad_creative_id=[IN_PAGE_AD_CREATIVE_ID]&deviceua=[DEVICEUA]";
 
-      let xx = Math.floor((Math.random() * 10) + 1);    
-      var x = "";
-      if(xx == 1){
-        x = "https://redirect.appmetrica.yandex.com/serve/388987897694452140?price=[PRICE]&click_id="+click_id+"&pricing_model=[PRICING_MODEL]&domain=[DOMAIN]&campaign_id=[CAMPAIGN_ID]&in_page_ad_id=[IN_PAGE_AD_ID]&in_page_ad_creative_id=[IN_PAGE_AD_CREATIVE_ID]&deviceua=[DEVICEUA]";  
-     }else{
-       x = "https://play.google.com/store/apps/details?id=com.download.videodownloaderapp&referrer=camp1";
-     }
+     //  let xx = Math.floor((Math.random() * 10) + 1);    
+     //  var x = "";
+     //  if(xx == 1){
+     //    x = "https://redirect.appmetrica.yandex.com/serve/388987897694452140?price=[PRICE]&click_id="+click_id+"&pricing_model=[PRICING_MODEL]&domain=[DOMAIN]&campaign_id=[CAMPAIGN_ID]&in_page_ad_id=[IN_PAGE_AD_ID]&in_page_ad_creative_id=[IN_PAGE_AD_CREATIVE_ID]&deviceua=[DEVICEUA]";  
+     // }else{
+     //   x = "https://play.google.com/store/apps/details?id=com.download.videodownloaderapp&referrer=camp1";
+     // }
     
     document.getElementById('contact_link1').href = x;
     document.getElementById('contact_link2').href = x;
