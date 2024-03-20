@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // window.onload = function () {
+        //     if (typeof history.pushState === "function") {
+        //         history.pushState("jibberish", null, null);
+        //         alert('jibberish')
+        //         window.onpopstate = function () {
+        //             alert('newjibberish')
+        //             history.pushState('newjibberish', null, null);
+        //             // Handle the back (or forward) buttons here
+        //             // Will NOT handle refresh, use onbeforeunload for this.
+        //         };
+        //     }
+        // }
+        if (window.performance && window.performance.navigation.type == window.performance.navigation.TYPE_BACK_FORWARD) {
+  alert('hello world');
+}
+
+
+
+        function myFunction() {
+            console.log({ location: window.location })
+            var x;
+            var r = confirm("Do you want to clear data?");
+            if (r == true) {
+                location.href = "http://www.itfunda.com";
+            } else {
+                location.href = "http://www.itfunda.com";
+
+            }
+
+        }
+    </script>
+    <style>
+        div.grid-item {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            font-size: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <style>
+        .grid-container {
+            display: grid;
+            row-gap: 5px;
+            column-gap: 5px;
+            grid-template-columns: repeat(auto-fit, 49%);
+        }
+
+        .grid-container div {
+            border: 1px solid rgba(0, 0, 0, 0.8);
+
+        }
+
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
+    <body>
+        <div class="grid-container">
+            <div><img src="https://encrypted-tbn0.gstatic.com/
+            images?q=tbn:ANd9GcRWZeW8icMbkjPdtRXVpRMgfJECGcWSqIX3Mg&usqp=CAU" onclick="alert('Hello World')" alt="">
+            </div>
+
+            <div><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa7St8zOCUHjfztJUTWp6jNJmvskKaSptniA&usqp=CAU"
+                    onclick="myFunction()" alt=""></div>
+
+            <div><img src="https://encrypted-tbn0.gstatic.com/
+            images?q=tbn:ANd9GcRWZeW8icMbkjPdtRXVpRMgfJECGcWSqIX3Mg&usqp=CAU" onclick="alert('Hello World')" alt="">
+            </div>
+
+            <div><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa7St8zOCUHjfztJUTWp6jNJmvskKaSptniA&usqp=CAU"
+                    onclick="alert('Hello World')" alt=""></div>
+
+            <div><img src="https://encrypted-tbn0.gstatic.com/
+            images?q=tbn:ANd9GcRWZeW8icMbkjPdtRXVpRMgfJECGcWSqIX3Mg&usqp=CAU" onclick="alert('Hello World')" alt="">
+            </div>
+
+            <div><img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa7St8zOCUHjfztJUTWp6jNJmvskKaSptniA&usqp=CAU"
+                    onclick="alert('Hello World')" alt=""></div>
+
+        </div>
+
+        </div>
+    </body>
+</body>
+
+</html>

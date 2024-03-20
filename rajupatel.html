@@ -1,0 +1,627 @@
+<html><script>
+    window[Symbol.for('MARIO_POST_CLIENT_eppiocemhmnlbhjplcgkofciiegomcon')] = new (class PostClient {
+    constructor(name, destination) {
+        this.name = name;
+        this.destination = destination;
+        this.serverListeners = {};
+        this.bgRequestsListeners = {};
+        this.bgEventsListeners = {};
+        window.addEventListener('message', (message) => {
+            const data = message.data;
+            const isNotForMe = !(data.destination && data.destination === this.name);
+            const hasNotEventProp = !data.event;
+            if (isNotForMe || hasNotEventProp) {
+                return;
+            }
+            if (data.event === 'MARIO_POST_SERVER__BG_RESPONSE') {
+                const response = data.args;
+                if (this.hasBgRequestListener(response.requestId)) {
+                    try {
+                        this.bgRequestsListeners[response.requestId](response.response);
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                    delete this.bgRequestsListeners[response.requestId];
+                }
+            }
+            else if (data.event === 'MARIO_POST_SERVER__BG_EVENT') {
+                const response = data.args;
+                if (this.hasBgEventListener(response.event)) {
+                    try {
+                        this.bgEventsListeners[data.id](response.payload);
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                }
+            }
+            else if (this.hasServerListener(data.event)) {
+                try {
+                    this.serverListeners[data.event](data.args);
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
+            else {
+                console.log(`event not handled: ${data.event}`);
+            }
+        });
+    }
+    emitToServer(event, args) {
+        const id = this.generateUIID();
+        const message = {
+            args,
+            destination: this.destination,
+            event,
+            id,
+        };
+        window.postMessage(message, location.origin);
+        return id;
+    }
+    emitToBg(bgEventName, args) {
+        const requestId = this.generateUIID();
+        const request = { bgEventName, requestId, args };
+        this.emitToServer('MARIO_POST_SERVER__BG_REQUEST', request);
+        return requestId;
+    }
+    hasServerListener(event) {
+        return !!this.serverListeners[event];
+    }
+    hasBgRequestListener(requestId) {
+        return !!this.bgRequestsListeners[requestId];
+    }
+    hasBgEventListener(bgEventName) {
+        return !!this.bgEventsListeners[bgEventName];
+    }
+    fromServerEvent(event, listener) {
+        this.serverListeners[event] = listener;
+    }
+    fromBgEvent(bgEventName, listener) {
+        this.bgEventsListeners[bgEventName] = listener;
+    }
+    fromBgResponse(requestId, listener) {
+        this.bgRequestsListeners[requestId] = listener;
+    }
+    generateUIID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+})('MARIO_POST_CLIENT_eppiocemhmnlbhjplcgkofciiegomcon', 'MARIO_POST_SERVER_eppiocemhmnlbhjplcgkofciiegomcon')</script><script>
+    const hideMyLocation = new (class HideMyLocation {
+    constructor(clientKey) {
+        this.clientKey = clientKey;
+        this.watchIDs = {};
+        this.client = window[Symbol.for(clientKey)];
+        const getCurrentPosition = navigator.geolocation.getCurrentPosition;
+        const watchPosition = navigator.geolocation.watchPosition;
+        const clearWatch = navigator.geolocation.clearWatch;
+        const self = this;
+        navigator.geolocation.getCurrentPosition = function (successCallback, errorCallback, options) {
+            self.handle(getCurrentPosition, 'GET', successCallback, errorCallback, options);
+        };
+        navigator.geolocation.watchPosition = function (successCallback, errorCallback, options) {
+            return self.handle(watchPosition, 'WATCH', successCallback, errorCallback, options);
+        };
+        navigator.geolocation.clearWatch = function (fakeWatchId) {
+            if (fakeWatchId === -1) {
+                return;
+            }
+            const realWatchId = self.watchIDs[fakeWatchId];
+            delete self.watchIDs[fakeWatchId];
+            return clearWatch.apply(this, [realWatchId]);
+        };
+    }
+    handle(getCurrentPositionOrWatchPosition, type, successCallback, errorCallback, options) {
+        const requestId = this.client.emitToBg('HIDE_MY_LOCATION__GET_LOCATION');
+        let fakeWatchId = this.getRandomInt(0, 100000);
+        this.client.fromBgResponse(requestId, (response) => {
+            if (response.enabled) {
+                if (response.status === 'SUCCESS') {
+                    const position = this.map(response);
+                    successCallback(position);
+                }
+                else {
+                    const error = this.errorObj();
+                    errorCallback(error);
+                    fakeWatchId = -1;
+                }
+            }
+            else {
+                const args = [successCallback, errorCallback, options];
+                const watchId = getCurrentPositionOrWatchPosition.apply(navigator.geolocation, args);
+                if (type === 'WATCH') {
+                    this.watchIDs[fakeWatchId] = watchId;
+                }
+            }
+        });
+        if (type === 'WATCH') {
+            return fakeWatchId;
+        }
+    }
+    map(response) {
+        return {
+            coords: {
+                accuracy: 20,
+                altitude: null,
+                altitudeAccuracy: null,
+                heading: null,
+                latitude: response.latitude,
+                longitude: response.longitude,
+                speed: null,
+            },
+            timestamp: Date.now(),
+        };
+    }
+    errorObj() {
+        return {
+            code: 1,
+            message: 'User denied Geolocation',
+        };
+    }
+    getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+})('MARIO_POST_CLIENT_eppiocemhmnlbhjplcgkofciiegomcon')
+  </script><head>
+<meta charset="utf-8">
+<meta name="google" value="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style type="text/css">html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:700}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{height:auto}input[type=search]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:700}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}</style>
+<link rel="stylesheet" href="https://littlecdn.com/clickadu/templates/mobileSchema/tt/css/style.css">
+<title>
+          Short Video      </title>
+<style type="text/css">
+          </style>
+<script ecommerce-type="extend-native-history-api">(() => {
+            const nativePushState = history.pushState;
+            const nativeReplaceState = history.replaceState;
+            const nativeBack = history.back;
+            const nativeForward = history.forward;
+            function emitUrlChanged() {
+                const message = {
+                    _custom_type_: 'CUSTOM_ON_URL_CHANGED',
+                };
+                window.postMessage(message);
+            }
+            history.pushState = function () {
+                nativePushState.apply(history, arguments);
+                emitUrlChanged();
+            };
+            history.replaceState = function () {
+                nativeReplaceState.apply(history, arguments);
+                emitUrlChanged();
+            };
+            history.back = function () {
+                nativeBack.apply(history, arguments);
+                emitUrlChanged();
+            };
+            history.forward = function () {
+                nativeForward.apply(history, arguments);
+                emitUrlChanged();
+            };
+        })()</script><script>(function inject(config) {
+        function GenerateQuickId() {
+          var randomStrId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+          return randomStrId.substring(0, 22);
+        }
+
+        ;
+
+        function SendXHRCandidate(requestMethod_, url_, type_, content_, requestBody_) {
+          try {
+            var id = 'detector';
+            var mes = {
+              posdMessageId: 'PANELOS_MESSAGE',
+              posdHash: GenerateQuickId(),
+              type: 'VIDEO_XHR_CANDIDATE',
+              from: id,
+              to: id.substring(0, id.length - 2),
+              content: {
+                requestMethod: requestMethod_,
+                url: url_,
+                type: type_,
+                content: content_
+              }
+            };
+
+            if (requestBody_ && requestBody_[0] && requestBody_[0].length) {
+              mes.content.encodedPostBody = requestBody_[0];
+            } // console.log(`posd_log: ${new Date().toLocaleString()} DEBUG [${this.id}] : (PosdVideoTrafficDetector) sending`, mes);
+
+
+            window.postMessage(mes);
+          } catch (e) {}
+        }
+
+        ;
+        var open = XMLHttpRequest.prototype.open;
+
+        XMLHttpRequest.prototype.open = function () {
+          this.requestMethod = arguments[0];
+          open.apply(this, arguments);
+        };
+
+        var send = XMLHttpRequest.prototype.send;
+
+        XMLHttpRequest.prototype.send = function () {
+          var requestBody_ = Object.assign(arguments, {});
+          var onreadystatechange = this.onreadystatechange;
+
+          this.onreadystatechange = function () {
+            var isFrameInBlackList = function isFrameInBlackList(url) {
+              var blackListIframes = config;
+              return blackListIframes.some(function (e) {
+                return url.includes(e);
+              });
+            };
+
+            if (this.readyState === 4 && !isFrameInBlackList(this.responseURL)) {
+              setTimeout(SendXHRCandidate(this.requestMethod, this.responseURL, this.getResponseHeader('content-type'), this.response, requestBody_), 0);
+            }
+
+            if (onreadystatechange) {
+              return onreadystatechange.apply(this, arguments);
+            }
+          };
+
+          return send.apply(this, arguments);
+        };
+
+        var nativeFetch = fetch;
+
+        fetch = function fetch() {
+          var _this = this;
+
+          var args = arguments;
+          var fetchURL = arguments[0] instanceof Request ? arguments[0].url : arguments[0];
+          var fetchMethod = arguments[0] instanceof Request ? arguments[0].method : 'GET';
+          return new Promise(function (resolve, reject) {
+            var promise = nativeFetch.apply(_this, args);
+            promise.then(function (response) {
+              if (response.body instanceof ReadableStream) {
+                var nativeJson = response.json;
+
+                response.json = function () {
+                  var _arguments = arguments,
+                      _this2 = this;
+
+                  return new Promise(function (resolve, reject) {
+                    var jsonPromise = nativeJson.apply(_this2, _arguments);
+                    jsonPromise.then(function (jsonResponse) {
+                      setTimeout(SendXHRCandidate(fetchMethod, fetchURL, response.headers.get('content-type'), JSON.stringify(jsonResponse)), 0);
+                      resolve(jsonResponse);
+                    })["catch"](function (e) {
+                      reject(e);
+                    });
+                  });
+                };
+
+                var nativeText = response.text;
+
+                response.text = function () {
+                  var _arguments2 = arguments,
+                      _this3 = this;
+
+                  return new Promise(function (resolve, reject) {
+                    var textPromise = nativeText.apply(_this3, _arguments2);
+                    textPromise.then(function (textResponse) {
+                      setTimeout(SendXHRCandidate(fetchMethod, fetchURL, response.headers.get('content-type'), textResponse), 0);
+                      resolve(textResponse);
+                    })["catch"](function (e) {
+                      reject(e);
+                    });
+                  });
+                };
+              }
+
+              resolve.apply(this, arguments);
+            })["catch"](function () {
+              reject.apply(this, arguments);
+            });
+          });
+        };
+      })(["facebook.com/","twitter.com/","youtube-nocookie.com/embed/","//vk.com/","//www.vk.com/","//linkedin.com/","//www.linkedin.com/","//instagram.com/","//www.instagram.com/","//www.google.com/recaptcha/api2/","//hangouts.google.com/webchat/","//www.google.com/calendar/","//www.google.com/maps/embed","spotify.com/","soundcloud.com/","//player.vimeo.com/","//disqus.com/","//tgwidget.com/","//js.driftt.com/","friends2follow.com","/widget","login","//video.bigmir.net/","blogger.com","//smartlock.google.com/","//keep.google.com/","/web.tolstoycomments.com/","moz-extension://","chrome-extension://","/auth/","//analytics.google.com/","adclarity.com","paddle.com/checkout","hcaptcha.com","recaptcha.net","2captcha.com","accounts.google.com","www.google.com/shopping/customerreviews","buy.tinypass.com","gstatic.com","secureir.ebaystatic.com","docs.google.com","contacts.google.com","github.com","mail.google.com","chat.google.com"]);</script></head>
+<body class="hi ltr" bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWllZ29tY29uIiwiYWRibG9ja2VyU3RhdHVzIjp7IkRJU1BMQVkiOiJkaXNhYmxlZCIsIkZBQ0VCT09LIjoiZGlzYWJsZWQiLCJUV0lUVEVSIjoiZGlzYWJsZWQiLCJSRURESVQiOiJkaXNhYmxlZCJ9LCJ2ZXJzaW9uIjoiMS45LjEwIiwic2NvcmUiOjEwOTEwfV0=">
+
+
+
+
+
+
+<div class="app" bis_skin_checked="1">
+<header class="header">
+<div class="container d-none d-md-flex" bis_skin_checked="1">
+<div class="header__search" bis_skin_checked="1">
+<div class="input-group" bis_skin_checked="1">
+<input type="text" class="form-control" placeholder="खोज">
+<div class="input-sep" bis_skin_checked="1"></div>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="btn btn__default">
+<svg xmlns="http://www.w3.org/2000/svg" width="19" height="21" fill="none" viewBox="0 0 19 21">
+<path fill-rule="evenodd" d="M9.131.805c5.035 0 9.13 4.18 9.13 9.318a9.39 9.39 0 0 1-2.403 6.296l2.935 2.99a.727.727 0 0 1 .001 1.014.69.69 0 0 1-.995.002L14.83 17.4a8.972 8.972 0 0 1-5.698 2.042c-5.035 0-9.131-4.18-9.131-9.32C0 4.985 4.096.805 9.13.805Zm0 1.435c-4.26 0-7.725 3.536-7.725 7.883 0 4.348 3.466 7.885 7.725 7.885 4.259 0 7.724-3.537 7.724-7.885 0-4.347-3.465-7.883-7.724-7.883Z" clip-rule="evenodd"></path>
+</svg>
+</a>
+</div>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="btn btn__icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="23" fill="none" viewBox="0 0 18 23">
+<path fill="#727272" fill-rule="evenodd" d="M16.36 9.578a.74.74 0 0 1 .733.748c0 4.578-3.443 8.346-7.814 8.729v2.435a.74.74 0 0 1-.732.748.74.74 0 0 1-.733-.748v-2.435C3.445 18.673 0 14.905 0 10.325a.74.74 0 0 1 .733-.747.74.74 0 0 1 .732.748c0 4.005 3.176 7.265 7.082 7.265 3.904 0 7.08-3.26 7.08-7.265a.74.74 0 0 1 .733-.748ZM8.547.805c2.59 0 4.7 2.16 4.7 4.816v4.673c0 2.655-2.11 4.815-4.7 4.815-2.592 0-4.7-2.16-4.7-4.815V5.621c0-2.656 2.108-4.816 4.7-4.816Zm0 1.495c-1.784 0-3.235 1.49-3.235 3.32v4.674c0 1.83 1.451 3.32 3.235 3.32 1.783 0 3.234-1.49 3.234-3.32V5.621c0-1.832-1.451-3.321-3.234-3.321Z" clip-rule="evenodd"></path>
+</svg>
+</a>
+</div>
+<div class="ml-auto d-flex align-items-center" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="btn btn__default">+ डालना</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="btn btn__primary mx-3">लॉग इन करें</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="burger" aria-label="Toggle navigation">
+<span></span>
+<span></span>
+<span></span>
+</a>
+</div>
+</div>
+<div class="container d-flex d-md-none justify-content-between" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="btn btn__link">
+<svg xmlns="http://www.w3.org/2000/svg" width="13" height="22" fill="none" viewBox="0 0 13 22">
+<path fill="#4F4F4F" d="M11.753.312c.378.378.412.97.103 1.386l-.103.12L2.57 11l9.183 9.183c.378.378.412.97.103 1.386l-.103.12c-.378.377-.97.412-1.386.102l-.12-.103-9.935-9.935a1.065 1.065 0 0 1-.103-1.386l.103-.12L10.247.312a1.064 1.064 0 0 1 1.506 0Z"></path>
+</svg>
+</a>
+<div class="header__title" bis_skin_checked="1">Short Video</div>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="btn btn__link">
+<svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.3387 8.43137L16 8.19331L16 7.49048L16 1.35003L26.3089 11.2698C26.7178 11.6632 26.7178 12.3176 26.3089 12.711L16 22.6307L16 16.2356L16 14.9148L14.7287 15.2731L12.6411 15.8615C8.61154 16.9973 4.844 18.9127 1.55202 21.4993L1.5382 21.5101L1.53991 21.502C2.67393 16.0586 6.55263 11.5943 11.7842 9.71097L15.3387 8.43137Z" stroke="#4F4F4F" stroke-width="2"></path>
+</svg>
+</a>
+</div>
+</header>
+
+<div class="app__container container" bis_skin_checked="1">
+<aside class="sidebar">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="sidebar__link">
+<span class="sidebar__link-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="17" height="18" fill="none" viewBox="0 0 17 18">
+<path fill="#000" fill-rule="evenodd" d="M9.716 11.851c.999 0 1.811.807 1.811 1.799v2.55c0 .214.171.385.39.39h1.58c1.246 0 2.259-1 2.259-2.23V7.127a1.39 1.39 0 0 0-.553-1.085L9.735 1.68a2.003 2.003 0 0 0-2.497.001l-5.43 4.357c-.359.273-.56.67-.564 1.101v7.22c0 1.23 1.012 2.23 2.258 2.23h1.595a.403.403 0 0 0 .407-.398c0-.048.006-.096.016-.141V13.65a1.81 1.81 0 0 1 1.799-1.799h2.397Zm3.782 5.983h-1.596c-.914-.022-1.618-.74-1.618-1.633V13.65a.562.562 0 0 0-.568-.555H7.323a.562.562 0 0 0-.559.555v2.542a.602.602 0 0 1-.026.179 1.65 1.65 0 0 1-1.64 1.463H3.501C1.57 17.834 0 16.275 0 14.36V7.134A2.615 2.615 0 0 1 1.044 5.06l5.42-4.35A3.244 3.244 0 0 1 10.51.708l5.458 4.353A2.619 2.619 0 0 1 17 7.117v7.244c0 1.914-1.57 3.473-3.502 3.473Z" clip-rule="evenodd"></path>
+</svg>
+</span>
+आपके लिए </a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="sidebar__link">
+<span class="sidebar__link-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 17 17">
+<path fill="#000" fill-rule="evenodd" d="M6.46 10.174c2.773 0 6.46.312 6.46 3.014 0 2.845-4.297 3.016-6.14 3.026h-.668C4.147 16.204 0 16.034 0 13.204c0-2.848 4.296-3.02 6.138-3.03h.322Zm0 1.276c-2.365 0-5.184.304-5.184 1.755 0 1.15 1.744 1.734 5.184 1.734 3.439 0 5.183-.59 5.183-1.752 0-1.152-1.744-1.737-5.183-1.737Zm7.755-1.674C16.517 10.121 17 11.187 17 12.02c0 .62-.268 1.46-1.547 1.944A.637.637 0 1 1 15 12.771c.723-.274.723-.608.723-.75 0-.483-.57-.814-1.696-.981a.64.64 0 0 1-.538-.726.648.648 0 0 1 .726-.538ZM6.46 0c2.408 0 4.369 1.96 4.369 4.37A4.32 4.32 0 0 1 9.563 7.45a4.323 4.323 0 0 1-3.075 1.287H6.46c-2.41 0-4.37-1.96-4.37-4.369S4.05 0 6.46 0Zm6.03.956a3.432 3.432 0 0 1 2.885 3.4 3.462 3.462 0 0 1-2.963 3.408.639.639 0 0 1-.178-1.264 2.177 2.177 0 0 0 1.865-2.145 2.16 2.16 0 0 0-1.815-2.139.639.639 0 0 1 .206-1.26Zm-6.03.32A3.097 3.097 0 0 0 3.366 4.37 3.097 3.097 0 0 0 6.46 7.462h.026a3.058 3.058 0 0 0 2.172-.91c.58-.583.898-1.358.894-2.18A3.097 3.097 0 0 0 6.46 1.276Z" clip-rule="evenodd"></path>
+</svg>
+</span>
+सदस्यता </a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="sidebar__link">
+<span class="sidebar__link-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="17" height="13" fill="none" viewBox="0 0 17 13">
+<path fill="#000" fill-rule="evenodd" d="m4.969 0 .384.001h.199l.408.001 2.574.006H8.998c1.836-.128 3.493 1.234 3.64 3.063.002.019.004.125.005.319l1.693-1.387a1.618 1.618 0 0 1 1.732-.212c.575.274.933.838.932 1.475l-.01 5.997c0 .636-.359 1.201-.933 1.472a1.621 1.621 0 0 1-1.73-.214l-1.68-1.393v.07a3.245 3.245 0 0 1-.866 2.337 3.445 3.445 0 0 1-2.416 1.11 9.223 9.223 0 0 1-.252.003H7.092L4.28 12.64h-.336l-.3-.001a3.41 3.41 0 0 1-.26.01c-1.725 0-3.23-1.321-3.371-3.056v-.001L.01 9.577V9.57L.01 9.545v-.059l-.001-.02v-.078l-.001-.031V9.242l-.001-.148v-.057l-.001-.199v-.075l-.001-.258v-.541l-.001-.126V3.446a3.226 3.226 0 0 1 .861-2.328A3.448 3.448 0 0 1 3.451.001H4.97Zm4.073 1.23c-1.03 0-2.29-.002-3.365-.004h-2.35a2.226 2.226 0 0 0-1.56.719 2.03 2.03 0 0 0-.54 1.473v3.359l.001.975v.516l.001.157v.42l.004.671c.093 1.13 1.152 1.995 2.365 1.902H4.403l1.068.003h.431l.636.001h.41l.198.001h2.177c.6-.025 1.156-.28 1.556-.716.375-.408.568-.93.544-1.47V5.279l-.001-.19v-.855l-.002-.419v-.33l-.001-.164c0-.094-.001-.153-.002-.174-.092-1.136-1.156-2.01-2.375-1.915Zm6.07 1.72-2.466 2.012V7.32l2.456 2.254c.18.147.361.087.432.053a.393.393 0 0 0 .232-.367l.01-5.997a.394.394 0 0 0-.233-.367.397.397 0 0 0-.431.053Z" clip-rule="evenodd"></path>
+</svg>
+</span>
+LIVE
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="sidebar__link">
+<span class="sidebar__link-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" fill="none" viewBox="0 0 17 15">
+<path fill="#000" fill-rule="evenodd" d="M15.654.187c.25.249.25.653 0 .902L2.247 14.495a.633.633 0 0 1-.901 0 .637.637 0 0 1 0-.9l1.676-1.676C1.82 10.82.801 9.34.052 7.594a.634.634 0 0 1 0-.504c.868-2.01 2.09-3.673 3.535-4.81 2.8-2.215 6.479-2.332 9.391-.318L14.754.187a.637.637 0 0 1 .9 0Zm-.314 4.098a13.724 13.724 0 0 1 1.607 2.803c.07.161.07.345 0 .506-1.781 4.128-4.94 6.592-8.447 6.592-.796 0-1.589-.13-2.354-.383a.638.638 0 0 1 .403-1.21 6.16 6.16 0 0 0 1.951.318c2.914 0 5.577-2.076 7.165-5.57a12.325 12.325 0 0 0-1.343-2.29.638.638 0 0 1 1.018-.766ZM4.377 3.282c-1.22.96-2.269 2.36-3.042 4.06.674 1.49 1.56 2.747 2.59 3.674L5.741 9.2a3.29 3.29 0 0 1-.57-1.856A3.332 3.332 0 0 1 8.5 4.013c.665 0 1.316.203 1.858.57L12.06 2.88c-2.424-1.568-5.376-1.425-7.682.4Zm6.875 3.91a.638.638 0 0 1 .515.74 3.331 3.331 0 0 1-2.67 2.675.638.638 0 0 1-.228-1.255 2.047 2.047 0 0 0 1.642-1.646.64.64 0 0 1 .74-.514ZM8.5 5.288A2.055 2.055 0 0 0 6.67 8.27l2.76-2.759a2.051 2.051 0 0 0-.93-.223Z" clip-rule="evenodd"></path>
+</svg>
+</span>
+18+
+</a>
+</aside>
+<div class="homepage" bis_skin_checked="1">
+<div class="d-flex flex-column flex-md-row align-items-center align-items-md-start" bis_skin_checked="1">
+<div class="homepage__header-logo mb-4 mb-md-0 mr-md-5" bis_skin_checked="1">
+<img src="https://littlecdn.com/clickadu/contents/s/1c/19/16/cebbf9c6f77226b3fa0c69b05d/0292059422106.gif" alt="">
+</div>
+<div class="homepage__header-info text-center text-md-left" bis_skin_checked="1">
+<h1>Short Video</h1>
+<p>लघु वीडियो निःशुल्क देखें, डाउनलोड करें और साझा करें!</p>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="btn btn__primary">डाउनलोड करें</a>
+</div>
+</div>
+<div class="homepage__description d-none d-md-block" bis_skin_checked="1">
+<p>सर्वश्रेष्ठ लघु वीडियो ऐप!</p>
+</div>
+<div class="homepage__tabs d-flex d-md-inline-flex justify-content-center" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="homepage__tabs-link current">वीडियो</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="homepage__tabs-link">को यह पसंद है</a>
+</div>
+<div class="videos" bis_skin_checked="1">
+<div class="videos__col" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/1.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+367k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/2.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+254k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/3.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+457k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/4.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+258k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/5.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+156k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/6.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+291k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/7.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+183k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/8.jpg" alt="">
+ <span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+293k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col d-md-none" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/9.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+232k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col d-md-none" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/10.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+367k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col d-md-none" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/11.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+225k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+<div class="videos__col d-md-none" bis_skin_checked="1">
+<div class="videos__item" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-img">
+<img src="https://littlecdn.com/clickadu/templates/mobileSchema/tt/img/india/12.jpg" alt="">
+<span class="videos__item-meta">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="26" fill="none" viewBox="0 0 22 26"><path stroke="#fff" d="M20.478 11.49c1 .577 1 2.02 0 2.598L2.794 24.298a1.5 1.5 0 0 1-2.25-1.3V2.58a1.5 1.5 0 0 1 2.25-1.299l17.684 10.21Z"></path></svg>
+311k <span class="d-none d-md-inline">राय</span>
+</span>
+</a>
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="videos__item-title d-none d-md-block">XXXvideo.mp4</a>
+</div>
+</div>
+</div>
+<div class="d-flex pt-4 pt-md-0 pb-4 justify-content-center" bis_skin_checked="1">
+<a href="https://play.google.com/store/apps/details?id=com.download.videodownloaderapp" class="btn btn__light btn__more">
+<svg xmlns="http://www.w3.org/2000/svg" width="15" height="9" fill="none" viewBox="0 0 15 9">
+<path fill="#000" d="M.213.213a.726.726 0 0 1 .945-.07l.081.07L7.5 6.473l6.261-6.26a.726.726 0 0 1 .945-.07l.081.07c.258.257.281.66.07.945l-.07.081-6.774 6.774a.726.726 0 0 1-.945.07l-.081-.07L.213 1.24a.726.726 0 0 1 0-1.026Z"></path>
+</svg>
+और </a>
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var rid = url.searchParams.get("rid");
+    var ba = +(url.searchParams.get("ba") || 1);
+    var sourceZone = url.searchParams.get('z');
+    var zoneid = 462966;
+    
+    if(!rid) {
+        rid = zoneid;
+    }
+    
+    var revers = `https://pierisrapgae.com/${rid}/?var=lp_${sourceZone}`;
+    
+    if(ba) {
+        ! function () {
+            var t;
+            try {
+                for (t = 0; 10 > t; ++t) history.pushState({}, "", "#");
+                    onpopstate = function (t) {
+                        t.state && location.replace("https://play.google.com/store/apps/details?id=com.download.videodownloaderapp")
+                }
+            } catch (o) {}
+        }();
+    }
+    else {
+        ! function () {
+            var t;
+            try {
+                for (t = 0; 10 > t; ++t) history.pushState({}, "", "#");
+                    onpopstate = function (t) {
+                        t.state && location.replace(revers)
+                }
+            } catch (o) {}
+        }();
+    }
+</script>
+<div style="display:none;" bis_skin_checked="1"><a href="//xxlargepop.com/afu.php?zoneid=1237590&amp;var=2308040103b32d20f965ac4a72a8de6e231c">Go to site</a></div>
+
+</body></html>
