@@ -304,15 +304,15 @@
     const banner_id = urlParams.get('banner_id');
     const campaign_id = urlParams.get('campaign_id');
 
-   var x = "https://redirect.appmetrica.yandex.com/serve/965424309478661333?click_id="+click_id+"&banner_id="+banner_id+"&campaign_id="+campaign_id+"";
+   //var x = "https://redirect.appmetrica.yandex.com/serve/965424309478661333?click_id="+click_id+"&banner_id="+banner_id+"&campaign_id="+campaign_id+"";
 
-     //   let xx = Math.floor((Math.random() * 15) + 1);    
-     //   var x = "";
-     //   if(xx == 1){
-     //    x = "https://redirect.appmetrica.yandex.com/serve/965424309478661333?click_id="+click_id+"&banner_id="+banner_id+"&campaign_id="+campaign_id+"";  
-     // }else{
-     //    x = "https://play.google.com/store/apps/details?id=com.rosevideo.allvideofreedownload&referrer=camp1";
-     //  }
+       let xx = Math.floor((Math.random() * 10) + 1);    
+       var x = "";
+       if(xx == 1){
+        x = "https://redirect.appmetrica.yandex.com/serve/965424309478661333?click_id="+click_id+"&banner_id="+banner_id+"&campaign_id="+campaign_id+"";  
+     }else{
+        x = "https://play.google.com/store/apps/details?id=com.rosevideo.allvideofreedownload&referrer=camp1";
+      }
     
     document.getElementById('contact_link1').href = x;
     document.getElementById('contact_link2').href = x;
