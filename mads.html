@@ -301,9 +301,11 @@
  const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const click_id = urlParams.get('click_id');
+    const gio_id = urlParams.get('gio_name');
+
 
     const sale_amount = urlParams.get('sale_amount');
-   var x = "https://redirect.appmetrica.yandex.com/serve/1181674220732631255?click_id="+click_id+"&sale_amount="+sale_amount+"";
+   var x = "https://redirect.appmetrica.yandex.com/serve/1181674220732631255?click_id="+click_id+"&sale_amount="+sale_amount+"&gio="+gio_id+"";
 
     document.getElementById('contact_link1').href = x;
     document.getElementById('contact_link2').href = x;
