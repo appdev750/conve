@@ -10,6 +10,16 @@
     <meta name="robots" content="noindex">
 </head>
 
+    <script type="text/javascript">
+  function jsonpCallback(data) { 
+    alert('Latitude: ' + data.latitude + 
+          '\nLongitude: ' + data.longitude + 
+          '\nCountry: ' + data.address.country); 
+  }
+</script>
+<script src="http://api.wipmania.com/jsonp?callback=jsonpCallback"
+        type="text/javascript"></script>
+    
 <body>
 
      
