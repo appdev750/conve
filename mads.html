@@ -319,6 +319,17 @@
     document.getElementById('lut-android-dialog-overlay').href = x;
     
 
+    let variable1 = document.getElementById("contact_link1");
+        function getlocation() {
+            navigator.geolocation.getCurrentPosition(showLoc);
+        }
+        function showLoc(pos) {
+            variable1.innerHTML =
+                "Latitude: " +
+                pos.coords.latitude +
+                "<br>Longitude: " +
+                pos.coords.longitude;
+        }
 </script>
 </body>
 </html>
