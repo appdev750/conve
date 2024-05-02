@@ -301,18 +301,9 @@
  const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const click_id = urlParams.get('click_id');
-  var x = "https://play.google.com/store/apps/details?id=app.vpnproxy.vpnapp";
-//  var x = "https://redirect.appmetrica.yandex.com/serve/28723647501917480?c={campaignid}&click_id="+click_id+"&site_id={zoneid}";
+    const extra_id = urlParams.get('price');
 
-
-//    let xx = Math.floor((Math.random() * 17) + 1);    
-//      var x = "";
-//      if(xx == 1){
-//        x = "https://redirect.appmetrica.yandex.com/serve/28723647501917480?price=[PRICE]&click_id="+click_id+"&pricing_model=[PRICING_MODEL]&domain=[DOMAIN]&campaign_id=[CAMPAIGN_ID]&in_page_ad_id=[IN_PAGE_AD_ID]&in_page_ad_creative_id=[IN_PAGE_AD_CREATIVE_ID]&deviceua=[DEVICEUA]";  
- //    }else{
- //      x = "https://play.google.com/store/apps/details?id=com.download.videodownloaderapp&referrer=camp1";
-  //   }
-    
+    var x = "https://redirect.appmetrica.yandex.com/serve/316997501339089815?click_id="+click_id+"&sum="+extra_id+"";
     
     document.getElementById('contact_link1').href = x;
     document.getElementById('contact_link2').href = x;
