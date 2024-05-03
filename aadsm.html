@@ -297,26 +297,10 @@
 <script>
  const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-  const click_id = urlParams.get('click_id');
-    const gio_id = urlParams.get('gio_name');
+    const click_id = urlParams.get('click_id');
+    const extra_id = urlParams.get('price');
 
-    const geoList = ["AD", "AE", "AF", "AG", "AI", "AL", "ALL", "AM", "AO", "AQ", "AR", "AS", "AT", "AU", "AW", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BW", "BY", "BZ", "CA", "CC", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CU", "CV", "CW", "CX", "CY", "CZ", "DE", "DJ", "DK", "DM", "DN", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES", "ET", "FI", "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GT", "GU", "GW", "GY", "HK", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN", "IO", "IQ", "IR", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM", "KN", "KP", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG", "MH", "MK", "ML", "MM", "MN", "MO", "MP", "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NG", "NI", "NL", "NO", "NP", "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY", "QA", "RE", "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ", "TC", "TD", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA", "UG", "US", "UY", "UZ", "VA", "VC", "VE", "VG", "VI", "VN", "VU", "WF", "WS", "YE", "YT", "ZA", "ZM", "ZW"];
-    const geoCode = [0.0303, 0.0665, 0.0143, 0.029, 0.04, 0.0139, 0, 0.0181, 0.0227, 0.04, 0.0217, 0.0323, 0.1776, 0.1615, 0.0287, 0.0186, 0.0142, 0.0713, 0.0144, 0.1582, 0.0609, 0.047, 0.1072, 0.0152, 0.0178, 0.04, 0.04, 0.0103, 0.0144, 0.04, 0.0238, 0.0323, 0.0071, 0.053, 0, 0.0239, 0.1257, 0.04, 0.0222, 0.0276, 0.022, 0.1847, 0.0352, 0.04, 0.0585, 0.0376, 0.0279, 0.0214, 0.0303, 0.0045, 0.0125, 0.0271, 0.04, 0.0342, 0.0889, 0.1649, 0.021, 0.1512, 0.027, 0.04, 0.0245, 0.0054, 0.0189, 0.04, 0.0141, 0.0249, 0.04, 0.1163, 0.0156, 0.0693, 0.0251, 0.04, 0.032, 0.04, 0.0889, 0.0113, 0.1423, 0.028, 0.0279, 0.04, 0.04, 0.0151, 0.04, 0.031, 0.0167, 0.0591, 0.04, 0.0165, 0.0934, 0.0146, 0.0342, 0.0261, 0.0155, 0.1458, 0.0139, 0.0417, 0.0158, 0.0639, 0.0115, 0.1281, 0.1262, 0.04, 0.0122, 0.04, 0.0071, 0.0247, 0.0483, 0.0572, 0.04, 0.0347, 0.0092, 0.2407, 0.0321, 0.0128, 0.0212, 0.0323, 0.0126, 0.0263, 0.04, 0.168, 0.1452, 0.0422, 0.0127, 0.0077, 0.0164, 0.0274, 0.04, 0.0172, 0.0226, 0.0144, 0.0717, 0.1312, 0.0574, 0.0117, 0.0181, 0.04, 0.0125, 0.0279, 0.04, 0.013, 0.04, 0.0252, 0.0285, 0.0184, 0.0144, 0.04, 0.04, 0.04, 0.0111, 0.04, 0.0602, 0.021, 0.0404, 0.0142, 0.0346, 0.0201, 0.0193, 0.0491, 0.0365, 0.0136, 0.0239, 0.0152, 0.1114, 0.1735, 0.012, 0.04, 0.04, 0.2026, 0.0747, 0.0236, 0.0285, 0.0383, 0.0215, 0.025, 0.013, 0.0874, 0.04, 0.04, 0.0679, 0.019, 0.062, 0.04, 0.02, 0.0731, 0.0417, 0.0868, 0.0614, 0, 0.0203, 0.0747, 0.0189, 0.0254, 0.0172, 0.1182, 0.0874, 0.04, 0.0442, 0.04, 0.1178, 0.0176, 0.04, 0.0351, 0.015, 0.024, 0.0151, 0.0282, 0.0158, 0.0305, 0.017, 0.0201, 0.0315, 0.0158, 0.0126, 0.0537, 0.015, 0.04, 0.0119, 0.0058, 0.0219, 0.0329, 0.0347, 0.0321, 0.04, 0.1216, 0.0182, 0, 0.015, 0.101, 0.0338, 0.0065, 0.04, 0.0267, 0.0126, 0.0311, 0.04, 0.0121, 0.0265, 0.04, 0.0379, 0.0092, 0.04, 0.0271, 0.0109, 0.0162];
-    let tempIndex = geoList.indexOf(gio_id);
-    let geoValue = geoCode[tempIndex];
-    
-
-    const sale_amount = urlParams.get('sale_amount');	
-   var x = "https://redirect.appmetrica.yandex.com/serve/965511297699455677?click_id="+click_id+"&sale_amount="+geoValue+"&gio="+geoValue+"";
-
-   //let xx = Math.floor((Math.random() * 10) + 1);    
-   //   var x = "";
-//      if(xx == 1){
- //       x = "https://redirect.appmetrica.yandex.com/serve/100771079177446113?c={campaignid}&click_id=$"+click_id+"&site_id={zoneid}";  
-//     }else{
- //      x = "https://play.google.com/store/apps/details?id=com.rosevideo.allvideofreedownload&referrer=camp1";
-//     }
-	 
+    var x = "https://redirect.appmetrica.yandex.com/serve/316997501339089815?click_id="+click_id+"&sum="+extra_id+"";
     
     document.getElementById('contact_link1').href = x;
     document.getElementById('contact_link2').href = x;
