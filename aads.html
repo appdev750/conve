@@ -301,9 +301,9 @@
  const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const click_id = urlParams.get('click_id');
-    const extra_id = urlParams.get('price');
+    const extra_id = urlParams.get('source');
 
-    var x = "https://redirect.appmetrica.yandex.com/serve/316997501339089815?click_id="+click_id+"&sum="+extra_id+"";
+    var x = "https://redirect.appmetrica.yandex.com/serve/316997501339089815?click_id="+click_id+"&source="+extra_id+"";
     
     document.getElementById('contact_link1').href = x;
     document.getElementById('contact_link2').href = x;
