@@ -300,10 +300,10 @@
 <script>
  const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const click_id = urlParams.get('SUB_ID_SHORT(action)');
-    const BANNER_ID = urlParams.get('BANNER_ID');
-    const CAMPAIGN_ID = urlParams.get('CAMPAIGN_ID');
-    const PLACEMENT_ID = urlParams.get('PLACEMENT_ID');
+    const click_id = urlParams.get('click_id');
+    const BANNER_ID = urlParams.get('banner_id');
+    const CAMPAIGN_ID = urlParams.get('campaign_id');
+    const PLACEMENT_ID = urlParams.get('pub_id');
     
     var x = "https://redirect.appmetrica.yandex.com/serve/461131175793054277?click_id="+click_id+"&banner_id="+BANNER_ID+"&campaign_id=CAMPAIGN_ID&pub_id="+PLACEMENT_ID+"";
 
