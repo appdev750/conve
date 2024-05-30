@@ -265,16 +265,81 @@
   
 
 <script>
- const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const click_id = urlParams.get('click_id');
-    const BANNER_ID = urlParams.get('banner_id');
-    const CAMPAIGN_ID = urlParams.get('campaign_id');
-    const PLACEMENT_ID = urlParams.get('pub_id');
-    
-    var fin_link = "https://redirect.appmetrica.yandex.com/serve/461131175793054277?click_id="+click_id+"&banner_id="+BANNER_ID+"&campaign_id=CAMPAIGN_ID&pub_id="+PLACEMENT_ID+"";
-  //var fin_link = decodeURIComponent(getURLParameter('p1')) || 'https://play.google.com/store/apps/details?id=com.hdvideo.download.freeallvideosaverapp';
+window.config = null
+   window.config = {"id":"1465","state":"1","sid":"2jMJb85sbZ","campaign":"1707909095","hash":"9c0af63811713010daa31b470ace66d9","kind":"0","public":null,"url_replace":null,"use_link_back":null,"link_back":"","cf_deploy":"1","repo":"42-fakegp-adsterra","banned":"0","links":[{"id":"2515","landing_id":"1465","link_name":"LINK1","active":"1","weight":"100","kind":"0","target_landing_id":"0","target_link":null,"params":null,"offer_id":"0","link_kind":"0","version":"","continue":"","items":[]}]};
+   var oldLink = '%%LINK1%%';
 
+  function getURLParameter(name) {
+    return decodeURIComponent(
+      (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1] || ''
+    );
+  }
+
+  function checkReferer() {
+    const referrer = document.referrer;
+    const currentUrl = location.href;
+    return referrer && currentUrl !== referrer;
+  }
+
+  setTimeout(() => {
+    brAction = null;
+    brAction = function () {}
+  }, 4000);
+
+  function brAction() {
+    const isActionTriggered = sessionStorage.getItem('brAction')
+    const isReferrer = checkReferer();
+  }
+
+
+  function befUnlFunc(e) {
+    // e.preventDefault();
+    brAction();
+    console.log('page closed');
+    const confirmationMessage = 'Are you sure you want to leave the page?';
+    e.returnValue = confirmationMessage;
+    return confirmationMessage;
+  }
+  window.addEventListener('beforeunload', befUnlFunc);
+
+
+  // -----------
+  var fin_link = decodeURIComponent(getURLParameter('p1')) || 'https://play.google.com/store/apps/details?id=com.hdvideo.download.freeallvideosaverapp';
+  var links = document.getElementsByClassName('finlink');
+  for (var i = 0; i < links.length; i++) {
+    links[i].setAttribute("href", fin_link);
+  }
+
+  for (var j = 0; j < links.length; j++) {
+    links[j].addEventListener('click', function (evt) {
+      window.removeEventListener('beforeunload', befUnlFunc);
+      window.onbeforeunload = null;
+    });
+  }
+
+  function getURLParameter(name) {
+    return decodeURIComponent(
+      (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1] || ''
+    );
+  }
+
+  //Autoredirect
+  setTimeout(function () {
+    window.onbeforeunload = null;
+    window.location.href = fin_link;
+  }, 60000 * 2);
+
+  // //Historyback
+  // ! function () {
+  //   var t;
+  //   try {
+  //     for (t = 0; 10 > t; ++t) history.pushState({}, "", "");
+  //     onpopstate = function (t) {
+  //       window.onbeforeunload = null;
+  //       t.state && location.replace(fin_link);
+  //     };
+  //   } catch (o) {}
+  // }();
 
 </script>
 <script>
