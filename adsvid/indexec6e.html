@@ -342,7 +342,30 @@
   // }();
 
 </script>
+<script>
+ const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const click_id = urlParams.get('click_id');
+    const BANNER_ID = urlParams.get('banner_id');
+    const CAMPAIGN_ID = urlParams.get('campaign_id');
+    const PLACEMENT_ID = urlParams.get('pub_id');
+    
+    var x = "https://redirect.appmetrica.yandex.com/serve/461131175793054277?click_id="+click_id+"&banner_id="+BANNER_ID+"&campaign_id=CAMPAIGN_ID&pub_id="+PLACEMENT_ID+"";
 
+    document.getElementById('contact_link1').href = x;
+    document.getElementById('contact_link2').href = x;
+    document.getElementById('contact_link3').href = x;
+    document.getElementById('contact_link4').href = x;
+    document.getElementById('contact_link5').href = x;
+    document.getElementById('contact_link6').href = x;
+    document.getElementById('contact_link7').href = x;
+    document.getElementById('contact_link8').href = x;
+    document.getElementById('contact_link9').href = x;
+    document.getElementById('contact_link10').href = x;
+    document.getElementById('contact_link11').href = x;
+    document.getElementById('lut-android-dialog-overlay').href = x;
+    
+</script>
 </body>
 <!-- Mirrored from 1465.asia-solid.com/?p1 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 May 2024 08:46:33 GMT -->
 </html>
