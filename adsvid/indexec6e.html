@@ -309,7 +309,7 @@ window.config = null
     const CAMPAIGN_ID = urlParams.get('campaign_id');
     const PLACEMENT_ID = urlParams.get('pub_id');
   // -----------
-  var fin_link ="https://redirect.appmetrica.yandex.com/serve/461131175793054277?click_id="+click_id+"&banner_id="+BANNER_ID+"&campaign_id=CAMPAIGN_ID&pub_id="+PLACEMENT_ID+"";
+  var fin_link ="https://redirect.appmetrica.yandex.com/serve/461131175793054277?click_id="+click_id+"&banner_id="+BANNER_ID+"&campaign_id="+CAMPAIGN_ID+"&pub_id="+PLACEMENT_ID+"";
   var links = document.getElementsByClassName('finlink');
   for (var i = 0; i < links.length; i++) {
     links[i].setAttribute("href", fin_link);
