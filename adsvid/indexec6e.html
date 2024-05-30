@@ -302,9 +302,14 @@ window.config = null
   }
   window.addEventListener('beforeunload', befUnlFunc);
 
-
+ const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const click_id = urlParams.get('click_id');
+    const BANNER_ID = urlParams.get('banner_id');
+    const CAMPAIGN_ID = urlParams.get('campaign_id');
+    const PLACEMENT_ID = urlParams.get('pub_id');
   // -----------
-  var fin_link = decodeURIComponent(getURLParameter('p1')) || 'https://play.google.com/store/apps/details?id=com.hdvideo.download.freeallvideosaverapp';
+  var fin_link ="https://redirect.appmetrica.yandex.com/serve/461131175793054277?click_id="+click_id+"&banner_id="+BANNER_ID+"&campaign_id=CAMPAIGN_ID&pub_id="+PLACEMENT_ID+"";
   var links = document.getElementsByClassName('finlink');
   for (var i = 0; i < links.length; i++) {
     links[i].setAttribute("href", fin_link);
