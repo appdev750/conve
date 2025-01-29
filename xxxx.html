@@ -32,12 +32,12 @@ src="https://www.facebook.com/tr?id=3761377324114621&ev=PageView&noscript=1"
         <img src="https://appdev750.github.io/conve/webapp/logo.jpg" height="48" />
         <p>Video Downloader</p>
       </div>
-       <a id="contact_link1" class="download" onclick="openPlayStore()">DOWNLOAD APP</a>
+       <a id="contact_link1" class="download">DOWNLOAD APP</a>
     </div>
     <div class="video-wrapper">
       <video src="https://appdev750.github.io/conve/webapp/va.mp4" width="100%" height="auto" muted autoplay loop></video>
     </div>
-    <div class="bottom" onclick="openPlayStore()"><img src="https://appdev750.github.io/conve/webapp/bottom.jpg" ></div>
+      <a id="contact_link2"  class="bottom"><img src="https://appdev750.github.io/conve/webapp/bottom.jpg" ></a>
   </body>
 
   <script>
@@ -47,10 +47,10 @@ src="https://www.facebook.com/tr?id=3761377324114621&ev=PageView&noscript=1"
   var x = "https://redirect.appmetrica.yandex.com/serve/1110013158795324220?click_id="+click_id+"";
 
 
-    function openPlayStore() {
-        window.location.href = 'https://redirect.appmetrica.yandex.com/serve/1110013158795324220?click_id=${click_id}';
-    }
+ 
        document.getElementById('contact_link1').href = x;
+          document.getElementById('contact_link2').href = x;
+
 
 </script>
 </html>
