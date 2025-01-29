@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glost Proxy for Android</title>
+    <link rel="stylesheet" href="C:/Users/admin/Desktop/webapp/_reset.css" />
+    <link rel="stylesheet" href="C:/Users/admin/Desktop/webapp/index.css" />
+  </head>
+  <body onclick="ADHorizoInstall.download()">
+    <div class="header">
+      <div class="logo-wrapper">
+        <img src="C:/Users/admin/Desktop/webapp/logo.jpg" height="48" />
+        <p>Vertex</p>
+      </div>
+      <div class="download" onclick="openPlayStore()">DOWNLOAD APP</div>
+    </div>
+    <div class="video-wrapper">
+      <video src="C:/Users/admin/Desktop/webapp/v.mp4" width="100%" height="auto" muted autoplay loop></video>
+    </div>
+    <div class="bottom" onclick="openPlayStore()"><img src="C:/Users/admin/Desktop/webapp/bottom.jpg" ></div>
+  </body>
+
+  <script>
+     const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const click_id = urlParams.get('fbclid') || ''; 
+    function openPlayStore() {
+        window.location.href = 'https://redirect.appmetrica.yandex.com/serve/1110013158795324220?click_id=${click_id}';
+    }
+</script>
+</html>

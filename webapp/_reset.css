@@ -1,0 +1,189 @@
+/*reset start*/
+html, body, h1, h2, h3, h4, h5, h6, div, dl, dt, dd, ul, ol, li, p, blockquote, pre, hr, figure, table, caption, th, td, form, fieldset, legend, input, button, textarea, menu {
+  margin: 0;
+  padding: 0;
+  font-family: "PingFang-SC-Medium",'Microsoft YaHei';
+}
+
+html, body, form, fieldset, p, div, h1, h2, h3, h4, h5, h6 {
+  -webkit-text-size-adjust: none;
+}
+
+header, footer, section, article, aside, nav, hgroup, address, figure, figcaption, menu, details {
+  display: block;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption, th {
+  text-align: left;
+  font-weight: normal;
+}
+
+html, body, fieldset, img, iframe, abbr {
+  border: 0;
+}
+
+i, cite, em, var, address, dfn {
+  font-style: normal;
+}
+
+[hidefocus], summary {
+  outline: 0;
+}
+
+li {
+  list-style: none;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+}
+
+h1, h2, h3, h4, h5, h6, small {
+  font-style: normal;
+  font-weight: normal;
+}
+
+pre, code, kbd, samp {
+  font-family: inherit;
+}
+
+q:before, q:after {
+  content: none;
+}
+
+textarea {
+  overflow: auto;
+  resize: none;
+}
+
+label, summary {
+  cursor: default;
+}
+
+a, button {
+  cursor: pointer;
+}
+
+button {
+  border: none;
+  outline: 0 none;
+}
+
+a {
+  color: #333;
+}
+
+del, ins, u, s, a, a:hover {
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body, textarea, input, button, select, keygen, legend {
+  color: #333;
+  outline: 0;
+}
+
+body * {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  overflow: hidden;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+* html .clearfix {
+  height: 1%;
+}
+
+input, textarea, select {
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.clearOver {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.f28 {
+  font-size: .28rem;
+}
+
+.f34 {
+  font-size: .34rem;
+}
+
+.page {
+  -webkit-overflow-scrolling: touch;
+}
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: #999;
+}
+
+input:-moz-placeholder, textarea:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #999;
+}
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #999;
+}
+
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #999;
+}
+
+.warn {
+  font-size: .32rem;
+  padding: .1rem .5rem;
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  border-radius: .1rem;
+  white-space: nowrap;
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
