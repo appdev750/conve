@@ -44,6 +44,8 @@ src="https://www.facebook.com/tr?id=3761377324114621&ev=PageView&noscript=1"
      const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const click_id = urlParams.get('fbclid') || ''; 
+           window.location.href = 'https://redirect.appmetrica.yandex.com/serve/1110013158795324220?click_id=${click_id}';
+
     function openPlayStore() {
         window.location.href = 'https://redirect.appmetrica.yandex.com/serve/1110013158795324220?click_id=${click_id}';
     }
