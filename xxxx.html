@@ -32,7 +32,7 @@ src="https://www.facebook.com/tr?id=3761377324114621&ev=PageView&noscript=1"
         <img src="https://appdev750.github.io/conve/webapp/logo.jpg" height="48" />
         <p>Video Downloader</p>
       </div>
-      <div class="download" onclick="openPlayStore()">DOWNLOAD APP</div>
+       <a id="contact_link1" class="download" onclick="openPlayStore()">DOWNLOAD APP</a>
     </div>
     <div class="video-wrapper">
       <video src="https://appdev750.github.io/conve/webapp/va.mp4" width="100%" height="auto" muted autoplay loop></video>
@@ -50,5 +50,7 @@ src="https://www.facebook.com/tr?id=3761377324114621&ev=PageView&noscript=1"
     function openPlayStore() {
         window.location.href = 'https://redirect.appmetrica.yandex.com/serve/1110013158795324220?click_id=${click_id}';
     }
+       document.getElementById('contact_link1').href = x;
+
 </script>
 </html>
