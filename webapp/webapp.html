@@ -1,75 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
- 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Video Downloader</title>
-    <link rel="stylesheet" href="_reset.css" />
-    <link rel="stylesheet" href="index.css" />
-  </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #fff;
+        }
 
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1344206123435745');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1344206123435745&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
- 
-  <body onclick="ADHorizoInstall.download()">
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header img {
+            height: 40px;
+        }
+
+        .download-app {
+            background: #00c853;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .video-wrapper img, .movie-poster {
+            width: 100%;
+            height: auto;
+            max-height: 250px;
+            object-fit: cover;
+        }
+
+        .download-section {
+            margin: 15px auto;
+            background: red;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        /* Mobile Responsive Fix */
+        @media (max-width: 480px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header img {
+                margin-bottom: 5px;
+            }
+
+            .download-app {
+                width: 90%;
+                padding: 10px;
+                font-size: 16px;
+                text-align: center;
+            }
+
+            .video-wrapper img, .movie-poster {
+                max-height: 200px;
+            }
+
+            .download-section {
+                font-size: 16px;
+                padding: 12px;
+                width: 90%;
+            }
+        }
+    </style>
+    <script>
+        function openPlayStore() {
+            window.location.href = "https://play.google.com/store/apps/details?id=your.package.name"; 
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Header -->
     <div class="header">
-      <div class="logo-wrapper">
-        <img src="logo.jpg" height="48" />
-        <p>XXX</p>
-      </div>
-      <div class="download" id="contact_link1">DOWNLOAD APP</div>
+        <img src="logo.jpg" alt="App Logo">
+        <a href="https://play.google.com/store/apps/details?id=your.package.name" class="download-app">DOWNLOAD APP</a>
     </div>
-    <div class="video-wrapper">
+
+    <!-- Video/Image -->
+    <div class="content-wrapper">
+        <div class="video-wrapper">
       <video src="va.mp4" width="100%" height="auto" muted autoplay loop></video>
+        </div>
+
+        <!-- Single Movie Poster (Same Size as Video) -->
+        <img class="movie-poster" src="bottom.jpg" alt="Movie Poster">
     </div>
-    <div class="bottom" id="contact_link2"><img src="bottom.jpg" ></div>
-  </body>
 
-  <script>
- const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const click_id = urlParams.get('click_id');
-  var x = "https://play.google.com/store/apps/details?id=com.blinky.livevideocall";
-//  var x = "https://redirect.appmetrica.yandex.com/serve/28723647501917480?c={campaignid}&click_id="+click_id+"&site_id={zoneid}";
+    <!-- Download Button -->
+    <div class="download-section" onclick="openPlayStore()">
+        Official effective 100% safe download
+    </div>
 
-
-//    let xx = Math.floor((Math.random() * 17) + 1);    
-//      var x = "";
-//      if(xx == 1){
-//        x = "https://redirect.appmetrica.yandex.com/serve/28723647501917480?price=[PRICE]&click_id="+click_id+"&pricing_model=[PRICING_MODEL]&domain=[DOMAIN]&campaign_id=[CAMPAIGN_ID]&in_page_ad_id=[IN_PAGE_AD_ID]&in_page_ad_creative_id=[IN_PAGE_AD_CREATIVE_ID]&deviceua=[DEVICEUA]";  
- //    }else{
- //      x = "https://play.google.com/store/apps/details?id=com.download.videodownloaderapp&referrer=camp1";
-  //   }
-    
-    
-    document.getElementById('contact_link1').href = x;
-    document.getElementById('contact_link2').href = x;
-    document.getElementById('contact_link3').href = x;
-    document.getElementById('contact_link4').href = x;
-    document.getElementById('contact_link5').href = x;
-    document.getElementById('contact_link6').href = x;
-    document.getElementById('contact_link7').href = x;
-    document.getElementById('contact_link8').href = x;
-    document.getElementById('contact_link9').href = x;
-    document.getElementById('contact_link10').href = x;
-    document.getElementById('contact_link11').href = x;
-    document.getElementById('lut-android-dialog-overlay').href = x;
-    
-</script>
+</body>
 </html>
