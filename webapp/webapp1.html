@@ -15,7 +15,7 @@
 
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             background: #fff;
             padding: 10px;
@@ -29,13 +29,13 @@
         .download-app {
             background: #00c853;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
-            white-space: nowrap;
             cursor: pointer;
             display: inline-block;
+            margin-top: 15px;
         }
 
         .content-wrapper {
@@ -65,7 +65,6 @@
             width: 100%;
         }
 
-        /* Mobile Responsive Fix */
         @media (max-width: 480px) {
             .header {
                 flex-direction: column;
@@ -96,30 +95,11 @@
     </style>
 </head>
 
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1344206123435745');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1344206123435745&ev=PageView&noscript=1"/>
-</noscript>
-<!-- End Meta Pixel Code -->
-
 <body>
 
     <!-- Header -->
     <div class="header">
         <img src="logo.jpg" alt="App Logo">
-        <a id="downloadBtn" class="download-app" href="https://play.google.com/store/apps/details?id=com.bhagya.videodownloader">DOWNLOAD APP</a>
     </div>
 
     <!-- Video/Image -->
@@ -128,8 +108,10 @@ src="https://www.facebook.com/tr?id=1344206123435745&ev=PageView&noscript=1"/>
             <video src="va.mp4" width="100%" height="auto" muted autoplay loop></video>
         </div>
 
-        <!-- Single Movie Poster (Same Size as Video) -->
         <img class="movie-poster" src="bottom.jpg" alt="Movie Poster">
+        
+        <!-- Moved Download Button Below Video & Image -->
+        <a id="downloadBtn" class="download-app" href="https://play.google.com/store/apps/details?id=com.bhagya.videodownloader" target="_blank">DOWNLOAD APP</a>
     </div>
 
     <!-- Download Button -->
@@ -138,37 +120,15 @@ src="https://www.facebook.com/tr?id=1344206123435745&ev=PageView&noscript=1"/>
     </div>
 
 <script>
-    // Extract click_id if present in the URL
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const click_id = urlParams.get('click_id') || '';
-
-    // Define the app download link
-    let appLink = `https://play.google.com/store/apps/details?id=com.bhagya.videodownloader`;
-
     function openPlayStore() {
-        // Facebook Pixel Event Tracking
+        let appLink = "https://play.google.com/store/apps/details?id=com.bhagya.videodownloader";
+        
         if (typeof fbq !== "undefined") {
-            fbq('track', 'PageView', { content_name: 'Download Button Clicked' });
+            fbq('track', 'Download', { content_name: 'Download Button Clicked' });
         }
 
-        // Redirect to app store
         window.location.href = appLink; 
     }
-
-    // Update all elements that should have the download link
-    const linkElements = [
-        'downloadBtn',
-        'lut-android-dialog-overlay'
-    ];
-
-    linkElements.forEach(id => {
-        let element = document.getElementById(id);
-        if (element) {
-            element.href = appLink;
-        }
-    });
-
 </script>
 
 </body>
