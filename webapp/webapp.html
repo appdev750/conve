@@ -34,6 +34,8 @@
             text-decoration: none;
             font-weight: bold;
             white-space: nowrap;
+            cursor: pointer;
+            display: inline-block;
         }
 
         .content-wrapper {
@@ -42,7 +44,7 @@
             margin: 0 auto;
         }
 
-        .video-wrapper img, .movie-poster {
+        .video-wrapper video, .movie-poster {
             width: 100%;
             height: auto;
             max-height: 250px;
@@ -81,7 +83,7 @@
                 text-align: center;
             }
 
-            .video-wrapper img, .movie-poster {
+            .video-wrapper video, .movie-poster {
                 max-height: 200px;
             }
 
@@ -94,11 +96,20 @@
     </style>
     <script>
         function openPlayStore() {
-            window.location.href = "https://redirect.appmetrica.yandex.com/serve/1110013158795324220"; 
+            let appLink = "https://redirect.appmetrica.yandex.com/serve/1110013158795324220";
+            
+            // Facebook Pixel Event Tracking
+            if (typeof fbq !== "undefined") {
+                fbq('track', 'Lead', { content_name: 'Download Button Clicked' });
+            }
+
+            // Redirect to app store
+            window.location.href = appLink; 
         }
     </script>
 </head>
-    <!-- Meta Pixel Code -->
+
+<!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -112,21 +123,22 @@ fbq('init', '1344206123435745');
 fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1344206123435745&ev=PageView&noscript=1"
-/></noscript>
+src="https://www.facebook.com/tr?id=1344206123435745&ev=PageView&noscript=1"/>
+</noscript>
 <!-- End Meta Pixel Code -->
+
 <body>
 
     <!-- Header -->
     <div class="header">
         <img src="logo.jpg" alt="App Logo">
-        <a href="https://redirect.appmetrica.yandex.com/serve/1110013158795324220" class="download-app">DOWNLOAD APP</a>
+        <a href="javascript:void(0);" class="download-app" onclick="openPlayStore()">DOWNLOAD APP</a>
     </div>
 
     <!-- Video/Image -->
     <div class="content-wrapper">
         <div class="video-wrapper">
-      <video src="va.mp4" width="100%" height="auto" muted autoplay loop></video>
+            <video src="va.mp4" width="100%" height="auto" muted autoplay loop></video>
         </div>
 
         <!-- Single Movie Poster (Same Size as Video) -->
