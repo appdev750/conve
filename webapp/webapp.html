@@ -122,6 +122,23 @@
                 border-radius: 40px;
             }
 
+            .app-photo_block{
+                display: flex;
+                justify-content: flex-start;
+                overflow-x: auto;
+            }
+            .preview-video{
+    border-width: 0;
+    object-fit: cover;
+    width: 124px;
+    min-width: 124px;
+    height: 220px;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
+}
+
             .video-wrapper img, .movie-poster {
                 max-height: 200px; /* Adjust for smaller screens */
             }
@@ -158,9 +175,9 @@ src="https://www.facebook.com/tr?id=513656501305009&ev=PageView&noscript=1"
     <div class="header">    
         <div class="logo-wrapper" bis_skin_checked="1">
             <img src="logo.jpg" alt="App Logo">
-            <p>Vertex</p>
+            <p>Downloader</p>
           </div>
-        <a class="download-app" href="https://play.google.com/store/apps/details?id=com.blinky.livevideocall" onclick="fbq('track', 'Lead', { content_name: 'App Download' });">Download App</a>
+        <a class="download-app" href="https://redirect.appmetrica.yandex.com/serve/533579022085433503" onclick="fbq('track', 'Lead', { content_name: 'App Download' });">Download App</a>
         <!-- <a href="your-download-link" class="download-app">DOWNLOAD APP</a> -->
     </div>
 
@@ -171,11 +188,26 @@ src="https://www.facebook.com/tr?id=513656501305009&ev=PageView&noscript=1"
         </div>
 
         <!-- Single Movie Poster (Same Size as Video) -->
-        <img class="movie-poster" src="bottom.jpg" alt="Movie Poster">
-    </div>
+        <div class="app-photo_block btn">
+          <a id="contact_link4" >
+              <video class="preview-video" muted autoplay loop>
+                  <source src="2.mp4" type="video/mp4">
+              </video>
+          </a>
+          <a id="contact_link5" >
+              <video class="preview-video" muted autoplay loop>
+                  <source src="3.mp4" type="video/mp4">
+              </video>
+          </a>
+          <a id="contact_link6" >
+              <video class="preview-video" muted autoplay loop>
+                  <source src="1.mp4" type="video/mp4">
+              </video>
+          </a>
+      </div>    </div>
 
     <!-- Download Button -->
-    <a class="download-section" href="https://play.google.com/store/apps/details?id=com.blinky.livevideocall" onclick="fbq('track', 'Lead', { content_name: 'App Download' });">Download App</a>
+    <a class="download-section" href="https://redirect.appmetrica.yandex.com/serve/533579022085433503" onclick="fbq('track', 'Lead', { content_name: 'App Download' });">Download App</a>
 
 <!--     <a id="contact_link1" class=" download-section" onclick="fbq('track', 'PageView')" onclick="fbq('track', 'PageView')" href="https://play.google.com/store/apps/details?id=com.blinky.livevideocall">Download App</a>
  -->
