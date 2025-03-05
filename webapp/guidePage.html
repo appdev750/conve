@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<!-- Mirrored from mhmdlive.zwpj.fun/guidePage.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 05 Mar 2025 11:50:06 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="static/js/rem.js"></script>
+    <link rel="stylesheet" href="../unpkg.byted-static.com/xgplayer/3.0.10/dist/index.min.css"/>
+    <link rel="stylesheet" href="static/css/index.css">
+    <link rel="stylesheet" href="static/css/swiper.min.css">
+    <script src="static/js/index.js"></script>
+  </head>
+  <body>
+    <div id="app" onclick="download();">
+      <!-- <div class="name">{{ 'appName' | setLangText }}</div> -->
+      <div class="title text-box-shadow" :data-text="msg('title')">{{ 'title' | setLangText }}</div>
+      <div class="desc" v-html="msg('desc')"></div>
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="(item, index) in videoList" :key="index">
+            <div class="video_box" :id="`videoShow${index}`"></div>
+            <div class="nick">{{ item.nick + ', ' + item.age }}</div>
+            <div class="call_btn">{{ 'videoChatNow' | setLangText }}</div>
+            <div class="sign">{{ item.signtrue }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="download_btn">Free Call</div>
+    </div>
+  </body>
+  <script charset="utf-8" src="../unpkg.byted-static.com/xgplayer/3.0.10/dist/index.min.js"></script>
+  <script src="static/js/vue.js"></script>
+  <script src="static/js/swiper.js"></script>
+  <script src="static/js/langData.js"></script>
+  <script>
+    
+		Vue.prototype.msg = function (msg) {  
+			return setJsLangText('en', msg)
+		}
+		new Vue({
+      el: '#app',
+			filters: {
+				setLangText(text) {
+					var lang = 'en'
+					if (langData[lang] == undefined) {
+						lang = 'en'
+					}
+					return langData[lang][text]
+				},
+      },
+      data: {
+        lang: 'en',
+        videoList: [
+          { nick: 'Kiffy', signtrue: `hey let's go fun with me ☺`, age: '20', videoUrl: './static/video/1.mp4', posterUrl: './static/video/1.webp' },
+          { nick: 'Mariann🧡', signtrue: `Gorgeous and hot content for you only`, age: '20', videoUrl: './static/video/2.mp4', posterUrl: './static/video/2.webp' },
+          { nick: 'luse💞', signtrue: `welcome to my profile, discover more about me 🤩`, age: '20', videoUrl: './static/video/3.mp4', posterUrl: './static/video/3.webp' },
+          { nick: 'hotleyz', signtrue: `Let's have some fun`, age: '20', videoUrl: './static/video/4.mp4', posterUrl: './static/video/4.webp' },
+          { nick: 'honeyb', signtrue: `I will show you what you want 🔥`, age: '20', videoUrl: './static/video/5.mp4', posterUrl: './static/video/5.webp' },
+          { nick: 'baby girl', signtrue: `join me to have fun time `, age: '20', videoUrl: './static/video/6.mp4', posterUrl: './static/video/6.webp' }
+        ],
+        videoDomList: [],
+      },
+      created() {
+      },
+      mounted() {
+        var that = this;
+        document.addEventListener('DOMContentLoaded', function() {
+          new Swiper('.swiper-container',{
+            autoplay:3000,
+            speed:1000,
+            direction: 'horizontal',
+            slidesPerView: "auto",
+            centeredSlides:true,
+            spaceBetween: 20,
+            loop:true,
+            onSlideChangeStart: function(swiper){
+            },
+            onSlideChangeEnd: function(swiper){
+              const videoList = document.querySelectorAll('video');
+              for (let i = 0; i < videoList.length; i++) {
+                videoList[i].pause();
+              }
+              videoList[swiper.activeIndex].play();
+              // that.swiperVideoPlayOrPause(swiper.activeIndex === 12 ? 0 : swiper.activeIndex % 6)
+            }
+          });
+        });
+        this.$nextTick(() => {
+          for (let i = 0; i < this.videoList.length; i++) {
+            const videoItem = this.videoList[i];
+            const videoItemConfig = {
+              id: `videoShow${i}`,
+              url: videoItem.videoUrl,
+              poster: videoItem.posterUrl,
+              playsinline: true,
+              height: '7.68rem',
+              width: '5rem',
+              volume: 0,
+              videoFillMode: 'fill',
+              closePlayVideoFocus: true,
+              loop: true,
+              closeVideoClick: true,
+              controls: false,
+              closeFocusVideoFocus: true,
+              closeDelayBlur: true,
+              inactive: 0,
+              leavePlayerTime: 0,
+            }
+            this.videoDomList.push(new Player(videoItemConfig))
+          }
+          setTimeout(() => {
+            // this.videoDomList[0].play();
+          }, 1000)
+        })
+      },
+      methods: {
+        swiperVideoPlayOrPause(index) {
+          for (let i = 0; i < this.videoDomList.length; i++) {
+            const videoDomItem = this.videoDomList[i];
+            if (i == index) {
+              videoDomItem.play();
+            } else {
+              videoDomItem.pause();
+            }
+          }
+        }
+      }
+    })
+  </script>
+
+<!-- Mirrored from mhmdlive.zwpj.fun/guidePage.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 05 Mar 2025 11:50:10 GMT -->
+</html>
