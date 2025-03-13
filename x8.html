@@ -29,17 +29,16 @@ src="https://www.facebook.com/tr?id=513656501305009&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
         <!-- End Facebook Pixel Code -->
-    </head>
-    <body>
-        <noscript>
-            <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=513656501305009&ev=ViewContent&noscript=1" />
-        </noscript>
-    </body>
+   
 
     <script type="text/javascript">
         function jumpToDownload(event) {
             // console.log('event:', event);
-            window.location.href = 'https://play.google.com/store/apps/details?id=com.downloader.hvideo';
+                fbq('track', 'ViewContent', { 
+        content_name: 'Redirect Page', 
+        content_category: 'App Redirect' 
+    });
+            window.location.href = 'https://redirect.appmetrica.yandex.com/serve/1182143817256605588';
         }
 
         function getCookie(name) {
