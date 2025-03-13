@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="">
+    
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="Referrer-Policy" content="no-referrer-when-downgrade" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+        <title>Flame</title>
+
+        <!-- Facebook Pixel Code -->
+        <script>
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            '../../../connect.facebook.net/en_US/fbevents.js');
+
+            fbq('init', '2537584146584150');
+            fbq('track', 'PageView');
+            fbq('trackCustom', 'webopen', { location: window.location.href, time: (new Date()).toLocaleString(), ua: window.navigator.userAgent });
+        </script>
+        <!-- End Facebook Pixel Code -->
+    </head>
+    <body>
+        <noscript>
+            <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2537584146584150&amp;ev=PageView&amp;noscript=1" />
+        </noscript>
+    </body>
+
+    <script type="text/javascript">
+        function jumpToDownload(event) {
+            // console.log('event:', event);
+            window.location.href = 'https://play.google.com/store/apps/details?id=com.downloader.hvideo';
+        }
+
+        function getCookie(name) {
+            var list = document.cookie.split("; ");
+
+            for (var i = 0, len = list.length; i < len; i++) {
+                var group = list[i].split('=');
+
+                if (group[0] === name) {
+                    return group[1];
+                }
+            }
+            return '';
+        }
+
+        function report(requestUrl) {
+            var options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ fbp: getCookie('_fbp'), fbc: getCookie('_fbc') }),
+            };
+
+            return fetch(requestUrl, options).finally(function() {
+                jumpToDownload();
+            });
+        }
+
+
+        report('https://api.lockulockme.com/event-tracking/fb-user-info');
+    </script>
+
+</html>
