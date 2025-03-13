@@ -36,8 +36,10 @@ src="https://www.facebook.com/tr?id=513656501305009&ev=PageView&noscript=1"
                 fbq('track', 'ViewContent', { 
         content_name: 'Redirect Page', 
         content_category: 'App Redirect' 
-    });
+        });
+         setTimeout(function() {
             window.location.href = 'https://redirect.appmetrica.yandex.com/serve/1182143817256605588';
+            }, 500);
         }
 
         function getCookie(name) {
